@@ -6,4 +6,5 @@
 	#include "glutGameObjects.h"
 	#include "glutGameRender.h"
 	#include "glutGameCamera.h"
+	#include "glutGameDebug.h"
 #endif

@@ -1,5 +1,7 @@
 #ifndef __GLUTGAME_CONFIG_H__
 #define __GLUTGAME_CONFIG_H__
+#define GLUTGAME_VERSION "dev.0.2"
+//#define  GLUTGAME_DEBUG_INFO
 //////////////////////////////////// CONTROLS ////////////////////////////////////
 #define GLUTGAME_CONTROL_FORW	'z'	//Moves the camera forwards	--Bit 0 in control reg
 #define GLUTGAME_CONTROL_BACK	's'	//Moves the camera backwards	--Bit 1 in control reg

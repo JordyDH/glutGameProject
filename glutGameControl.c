@@ -16,7 +16,7 @@
 
 //CONTROL REGISTER
 uint64_t GLUTGAME_CONTROL_REG = 0;
-
+uint16_t pointerwarped = 0;
 glutGameObjectplayer *mainplayer;
 
 double	*rotation_lr;
@@ -43,6 +43,11 @@ void glutGameControlInit(glutGameObjectplayer *player)
 	glutGameMouseInit();
 	glutGameKeyboardInit();
 	glutTimerFunc(GLUTGAME_CONTROL_TIMER,glutGameControlUpdate,0);
+}
+
+uint64_t glutGameControlGetRegister()
+{
+	return GLUTGAME_CONTROL_REG;
 }
 
 void glutGameControlUpdate()
@@ -89,18 +94,20 @@ void glutGameMouseKeys(int button, int state, int x, int y)
 */
 void glutGameMouseMove(int x, int y)
 {
-//	glutWarpPointer(0,0);		//Problem on some machines, TODO need to look more into before adding
 	int delta_x = 0, delta_y = 0;
 	delta_x = x - mouse_x_old;
 	delta_y = y - mouse_y_old;
-	if(mouse_state_left)
+	if((mouse_state_left==1) && (pointerwarped == 0))
 	{
 		if((delta_x!=0)||(delta_y!=0))
 		{
+			pointerwarped = 1;
+			glutWarpPointer(400,400);		//Problem on some machines
 			//TODO Add callback function to bind to buttons
 			glutGameRotateCamera(((double)delta_x/100),((double)delta_y/100));
 		}
 	}
+	else if(pointerwarped == 1)pointerwarped=0;
 	//#Save location in old value
 	mouse_x_old = x;
 	mouse_y_old = y;
