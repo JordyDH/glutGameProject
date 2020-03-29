@@ -14,11 +14,7 @@
 
 //////////////////////////////////// LIB VARS ////////////////////////////////////
 uint64_t systick = 0;
-glutGameObjectplayer mainplayer;
-//////////////////////////////////// LIB FUNCTION ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// ONLY CHANGE THE FUNCTION IF YOU KNOW WHAT YOU ARE DOING OR IF YOU JUST WANT TO EXPERIMENT
-// SO HAVE A NICE EXPERIENCE, WHEN YOU HAVE PROBLEMS TO IMPLEMENT A FEATURE (NOT BUG ;) )
-// OPEN A FEATURE REQUEST TICKET ON GITHUB
+glutGameObjectplayer *mainplayer;
 
 //////////////////////////////////// GLUTGAME CORE FUNCTIONS ////////////////////////////////////
 
@@ -32,14 +28,16 @@ glutGameObjectplayer mainplayer;
 */
 void glutGameInit()
 {
+	mainplayer = glutGameObjectsAlloc_player();
 	glutDisplayFunc(glutGameRender);
 	glutReshapeFunc(glutGameRescale);
 	glutTimerFunc(0,glutGameIdle,0);
 	glutTimerFunc(GLUTGAME_SYSTICK_INTERVAL,glutGameSystickService,0);
 
-	glutGameControlInit(&mainplayer);
-	glutGameCameraInit(&mainplayer,0,0,5);
-	glutGameDebugInit(&mainplayer);
+	mainplayer = glutGameObjectsAlloc_player();
+	glutGameControlInit(mainplayer);
+	glutGameCameraInit(mainplayer,0,0,5);
+	glutGameDebugInit(mainplayer);
 }
 
 /*

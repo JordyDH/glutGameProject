@@ -14,9 +14,8 @@
 #include <GL/glut.h>
 #include "glutGameLibs.h"
 
-//CONTROL REGISTER
+//////////////////////////////////// [LIB VARS] //////////////////////////////////////////////////////
 uint64_t GLUTGAME_CONTROL_REG = 0;
-uint16_t pointerwarped = 0;
 glutGameObjectplayer *mainplayer;
 
 double	*rotation_lr;
@@ -97,17 +96,14 @@ void glutGameMouseMove(int x, int y)
 	int delta_x = 0, delta_y = 0;
 	delta_x = x - mouse_x_old;
 	delta_y = y - mouse_y_old;
-	if((mouse_state_left==1) && (pointerwarped == 0))
+	if(mouse_state_left)
 	{
 		if((delta_x!=0)||(delta_y!=0))
 		{
-			pointerwarped = 1;
-			glutWarpPointer(400,400);		//Problem on some machines
 			//TODO Add callback function to bind to buttons
 			glutGameRotateCamera(((double)delta_x/100),((double)delta_y/100));
 		}
 	}
-	else if(pointerwarped == 1)pointerwarped=0;
 	//#Save location in old value
 	mouse_x_old = x;
 	mouse_y_old = y;
