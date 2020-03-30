@@ -13,8 +13,8 @@
 #include "glutGameLibs.h"
 
 //////////////////////////////////// LIB VARS ////////////////////////////////////
-uint64_t systick = 0;
-glutGameObjectplayer *mainplayer;
+static uint64_t systick = 0;
+static glutGameObjectplayer *mainplayer;
 
 //////////////////////////////////// GLUTGAME CORE FUNCTIONS ////////////////////////////////////
 
@@ -31,12 +31,12 @@ void glutGameInit()
 	mainplayer = glutGameObjectsAlloc_player();
 	glutDisplayFunc(glutGameRender);
 	glutReshapeFunc(glutGameRescale);
-	glutTimerFunc(0,glutGameIdle,0);
+	glutTimerFunc(10,glutGameIdle,0);
 	glutTimerFunc(GLUTGAME_SYSTICK_INTERVAL,glutGameSystickService,0);
 
 	mainplayer = glutGameObjectsAlloc_player();
 	glutGameControlInit(mainplayer);
-	glutGameCameraInit(mainplayer,0,0,5);
+	glutGameCameraInit(mainplayer,2,0,5);
 	glutGameDebugInit(mainplayer);
 }
 
@@ -60,7 +60,7 @@ void glutGameMainLoop()
 void glutGameIdle()
 {
 	glutPostRedisplay();
-	glutTimerFunc(0,glutGameIdle,0);
+	glutTimerFunc(15,glutGameIdle,0);
 }
 
 /*

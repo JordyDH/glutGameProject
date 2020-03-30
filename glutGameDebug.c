@@ -4,8 +4,6 @@
 //	MIT LICENSE , goto www.github.com/JordyDH/glutGameControl
 //
 ////////////////////////////////////////////////////////////////////
-#define  GLUT_GAMEC_VERSION "0.2"
-//#define  GLUTGAME_DEBUG_INFO
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -14,14 +12,12 @@
 #include <GL/glut.h>
 #include "glutGameLibs.h"
 
-//////////////////////////////////// LIB VARS ////////////////////////////////////
-double	*rotation_lr;
-double	*rotation_ud;
-
-double	*xl, *yl, *zl;
-double	*xPos, *yPos, *zPos;
-
-//////////////////////////////////// GLUTGAME IN GAME DEBUG FUNCTIONS ////////////////////////////////////
+//////////////////////////////////// [LIB VARS] ////////////////////////////////////
+static double	*rotation_lr;
+static double	*rotation_ud;
+static double	*xl, *yl, *zl;
+static double	*xPos, *yPos, *zPos;
+//////////////////////////////////// [GLUTGAME IN GAME DEBUG FUNCTIONS] ////////////////////////////////////
 
 void glutGameDebugInit(glutGameObjectplayer *player)
 {
@@ -75,10 +71,12 @@ void glutGameRenderLocalAxis()
 
 void glutBitmapString(void *font, char *text)
 {
-	for(;(*text)!='\0';text++)
+	if(text!=0x00)
 	{
-		//glutStrokeCharacter(GLUT_STROKE_MONO_ROMAN,(*text));
-		glutBitmapCharacter(font,(*text));
+		for(;(*text)!='\0';text++)
+		{
+			glutBitmapCharacter(font,(*text));
+		}
 	}
 }
 

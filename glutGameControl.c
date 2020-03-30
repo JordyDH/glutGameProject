@@ -4,8 +4,6 @@
 //	MIT LICENSE , goto www.github.com/JordyDH/glutGameControl
 //
 ////////////////////////////////////////////////////////////////////
-#define  GLUT_GAMEC_VERSION "0.2"
-//#define  GLUTGAME_DEBUG_INFO
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -15,29 +13,27 @@
 #include "glutGameLibs.h"
 
 //////////////////////////////////// [LIB VARS] //////////////////////////////////////////////////////
-uint64_t GLUTGAME_CONTROL_REG = 0;
-glutGameObjectplayer *mainplayer;
+static uint64_t GLUTGAME_CONTROL_REG = 0;
+static glutGameObjectplayer *mainplayer;
+static double *rotation_lr;
+static double *rotation_ud;
 
-double	*rotation_lr;
-double	*rotation_ud;
+static uint8_t mouse_state_left = 0, mouse_state_right = 0;
+static uint32_t mouse_x_old = 0, mouse_y_old = 0;
 
-int	mouse_state_left = 0, mouse_state_right = 0;
-int	mouse_x_old = 0, mouse_y_old = 0;
-
-double	*xl, *yl, *zl;
-double	*xPos, *yPos, *zPos;
-double	speed_mul = 0.1;
-
+static double *xl, *yl, *zl;
+static double *xPos, *yPos, *zPos;
+static double speed_mul = 0.1;
 //////////////////////////////////// [GLUTGAME CONTROL FUNCTIONS] ////////////////////////////////////
 
 void glutGameControlInit(glutGameObjectplayer *player)
 {
 	mainplayer = player;
-	xPos = &(*mainplayer).base.x;
-	yPos = &(*mainplayer).base.y;
-	zPos = &(*mainplayer).base.z;
-	rotation_ud = &(*mainplayer).rotation_y;
-	rotation_lr = &(*mainplayer).rotation_xz;
+	xPos = &(*player).base.x;
+	yPos = &(*player).base.y;
+	zPos = &(*player).base.z;
+	rotation_ud = &(*player).rotation_y;
+	rotation_lr = &(*player).rotation_xz;
 
 	glutGameMouseInit();
 	glutGameKeyboardInit();

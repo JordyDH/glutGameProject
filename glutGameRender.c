@@ -4,8 +4,6 @@
 //	MIT LICENSE , goto www.github.com/JordyDH/glutGameControl
 //
 ////////////////////////////////////////////////////////////////////
-#define  GLUT_GAMEC_VERSION "0.2"
-//#define  GLUTGAME_DEBUG_INFO
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -19,10 +17,13 @@ void (*RenderScene_fnc)() = 0x00;	//Callback function to render the 3D scene
 void (*RenderScene2D_fnc)() = 0x00;	//Callback function to render the 2D scene
 
 //////////////////////////////////// [GLUTGAME RENDER FUNCTION]  ////////////////////////////////////
-double	framecounter = 0;
-int	timebase = 0;
-double	fps = 0;
-uint64_t screen_width = 0, screen_height = 0;
+static double	framecounter = 0;
+static int	timebase = 0;
+static double	fps = 0;
+static uint64_t screen_width = 0, screen_height = 0;
+static uint64_t world_buffer = 0;
+
+static uint64_t rendertimebase = 0;
 
 uint64_t glutGameRenderScreenWidth()
 {
@@ -93,9 +94,10 @@ void glutGameRender()
 	glutGameRenderScene();
 	glutGameRender2DScene();
 	#ifdef GLUTGAME_RENDER_DUBBELBUFFER
+		glFinish();
 		glutSwapBuffers();
 	#else
-		glFinish();
+		//glFinish();
 		glFlush();
 	#endif
 	glutGameRenderFPS();
@@ -149,3 +151,50 @@ double glutGameRenderGetFPS()
 	return fps;
 }
 
+void glutGameRenderAllObjects()
+{
+/*
+	glutGameObjectList *objectList;
+	glutGameObjectobject *p;
+
+	objectList = glutGameObjectsGetList();
+	for(;objectList!=0;objectList = (*objectList).next)
+	{
+	if((*objectList).struct_id == GLUTGAME_STRUCTID_OBJECT)
+	{
+		p = (*objectList).object;
+		glutGameRenderObject(p);
+	}
+	}
+*/
+	glCallList(world_buffer);
+}
+
+void glutGameRenderObject(glutGameObjectobject *object)
+{
+	glPushMatrix();
+	glTranslatef((*object).x,(*object).y,(*object).z);
+	(*(*object).callback)();
+	glPopMatrix();
+}
+
+void glutGameRenderCompileList()
+{
+	glutGameObjectList *objectList;
+	glutGameObjectobject *p;
+
+	objectList = glutGameObjectsGetList();
+	if(world_buffer!=0) glDeleteLists(world_buffer,1);
+	world_buffer = glGenLists(1);
+	printf("world id: %ld\n",world_buffer);
+	glNewList(world_buffer, GL_COMPILE);
+	for(;objectList!=0;objectList = (*objectList).next)
+	{
+	if((*objectList).struct_id == GLUTGAME_STRUCTID_OBJECT)
+	{
+		p = (*objectList).object;
+		glutGameRenderObject(p);
+	}
+	}
+	glEndList();
+}

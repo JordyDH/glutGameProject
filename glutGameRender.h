@@ -9,4 +9,7 @@ void glutGameRender();
 void glutGameRescale(GLint n_w, GLint n_h);
 void glutGameRenderFPS();
 double glutGameRenderGetFPS();
+void glutGameRenderAllObjects();
+void glutGameRenderObject(glutGameObjectobject *object);
+void glutGameRenderCompileList();
 #endif

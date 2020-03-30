@@ -4,8 +4,6 @@
 //	MIT LICENSE , goto www.github.com/JordyDH/glutGameControl
 //
 ////////////////////////////////////////////////////////////////////
-#define  GLUT_GAMEC_VERSION "0.2"
-//#define  GLUTGAME_DEBUG_INFO
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -14,13 +12,11 @@
 #include <GL/glut.h>
 #include "glutGameLibs.h"
 
-//TODO Change to pointer or something better than extern
-extern uint64_t GLUTGAME_CONTROL_REG;
-double	*rotation_lr;
-double	*rotation_ud;
-
-double	*xl, *yl, *zl;
-double	*xPos, *yPos, *zPos;
+//////////////////////////////////// [LIB VARS] /////////////////////////////////////////////////////
+static double	*rotation_lr;
+static double	*rotation_ud;
+static double	*xl, *yl, *zl;
+static double	*xPos, *yPos, *zPos;
 
 //////////////////////////////////// [GLUTGAME CAMERA FUNCTIONS] ////////////////////////////////////
 // These are the function to control (translate, rotate) the camera) around the world.
