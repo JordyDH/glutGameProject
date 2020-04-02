@@ -14,9 +14,9 @@
 #define GLUTGAME_CONTROL_TIMER	1
 //////////////////////////////////// PLAYER MODEL ////////////////////////////////////
 #define GLUTGAME_PLAYER_HEIGHT		1.0	//Default player height, possition of the camera
-#define GLUTGAME_PLAYER_BASESPEED	0.1	//Default step size
+#define GLUTGAME_PLAYER_BASESPEED	0.05	//Default step size
 #define GLUTGAME_PLAYER_NEARSIGHT	0.01
-#define GLUTGAME_PLAYER_FARSIGHT	100
+#define GLUTGAME_PLAYER_FARSIGHT	1000
 
 //////////////////////////////////// RENDER SETTINGS ////////////////////////////////////
 #define GLUTGAME_RENDER_FAST			//Renders the scene as fast a possible.

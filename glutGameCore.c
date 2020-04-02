@@ -60,7 +60,7 @@ void glutGameMainLoop()
 void glutGameIdle()
 {
 	glutPostRedisplay();
-	glutTimerFunc(15,glutGameIdle,0);
+	glutTimerFunc(17,glutGameIdle,0);
 }
 
 /*

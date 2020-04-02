@@ -12,7 +12,7 @@ LIBS = -lglut -lGLU -lGL -lGLw -lXt -lXext -lX11 -ljpeg -lm
 DEBUGFLAGS = -O3 -g
 CFLAGS = -DD32 $(DEBUGFLAGS) $(INCPATH) 
 SRCS = \
-	sandbox.c glutGameCore.c glutGameObjects.c glutGameCamera.c glutGameControl.c glutGameRender.c glutGameDebug.c
+	perlin.c sandbox.c glutGameCore.c glutGameObjects.c glutGameCamera.c glutGameControl.c glutGameRender.c glutGameDebug.c
 
 OBJS = $(SRCS:.c=.o)
 
@@ -49,6 +49,10 @@ glutGameDebug:  clean $(OBJS)
 sandbox:  clean $(OBJS)
 	LDOPTS= \
 	cc -o sandbox $(CFLAGS) $(OBJS) $(LIBPATH) $(LIBS) 
+
+perlin:  clean $(OBJS)
+	LDOPTS= \
+	cc -o perlin $(CFLAGS) $(OBJS) $(LIBPATH) $(LIBS) 
 
 clean:
 	rm -f sandbox glutGameCore glutGameControl glutGameObjects glutGameRender glutGameCamera glutGameDebug $(OBJS) core

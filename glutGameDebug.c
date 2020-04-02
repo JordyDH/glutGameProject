@@ -82,7 +82,7 @@ void glutBitmapString(void *font, char *text)
 
 void glutGameRenderOnScreenInfo()
 {
-	glColor3f(0,0,0);
+	glColor3f(1,1,1);
 	char text[30];
 	//itoa(systick,text,10);
 	glRasterPos2f(5,20);

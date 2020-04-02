@@ -4,6 +4,7 @@
 #include <math.h>
 #include <GL/glut.h>
 #include "glutGameLibs.h"
+#include "perlin.h"
 
 GLdouble xlens = 1.0, ylens = 1.0, zlens = 3.0;
 GLdouble xref = 1.0, yref = 1.0, zref = 0.0;
@@ -18,59 +19,75 @@ int togle = 0;
 void kubus();
 
 uint32_t buffer;
+#define SIZE 80
+#define SCALE 0.02
+double terrain[SIZE][SIZE];
 
 void myinit(void)
 {
-	glClearColor(0.8, 0.8, 0.8, 0.0);
+	glClearColor(0,0,0,0);
 	glClearDepth(1.0);
 	glEnable(GL_DEPTH_TEST);
+	genterain();
 }
 
-
-void fullkubus(int x, int y, int z, float size)
+uint64_t terrain_id = 0;
+void terrain_render()
 {
-		glVertex3d(x-(size/2),y-(size/2),z+(size/2));
-		glVertex3d(x+(size/2),y-(size/2),z+(size/2));
-		glVertex3d(x+(size/2),y+(size/2),z+(size/2));
-		glVertex3d(x-(size/2),y+(size/2),z+(size/2));
-		glVertex3d(x+(size/2),y-(size/2),z+(size/2));
-		glVertex3d(x+(size/2),y-(size/2),z-(size/2));
-		glVertex3d(x+(size/2),y+(size/2),z-(size/2));
-		glVertex3d(x+(size/2),y+(size/2),z+(size/2));
-		glVertex3d(x-(size/2),y-(size/2),z-(size/2));
-		glVertex3d(x+(size/2),y-(size/2),z-(size/2));
-		glVertex3d(x+(size/2),y+(size/2),z-(size/2));
-		glVertex3d(x-(size/2),y+(size/2),z-(size/2));
-		glVertex3d(x-(size/2),y-(size/2),z+(size/2));
-		glVertex3d(x-(size/2),y-(size/2),z-(size/2));
-		glVertex3d(x-(size/2),y+(size/2),z-(size/2));
-		glVertex3d(x-(size/2),y+(size/2),z+(size/2));
-		glVertex3d(x-(size/2),y-(size/2),z-(size/2));
-		glVertex3d(x+(size/2),y-(size/2),z-(size/2));
-		glVertex3d(x+(size/2),y-(size/2),z+(size/2));
-		glVertex3d(x-(size/2),y-(size/2),z+(size/2));
-		glVertex3d(x-(size/2),y+(size/2),z-(size/2));
-		glVertex3d(x+(size/2),y+(size/2),z-(size/2));
-		glVertex3d(x+(size/2),y+(size/2),z+(size/2));
-		glVertex3d(x-(size/2),y+(size/2),z+(size/2));
+
+	for(int y = 0; y < SIZE-1; y++){
+	for(int x = 0; x < SIZE-1; x++){
+/*
+	glColor3f(terrain[x][y]/10,0,1.0-terrain[x][y]/10);
+	glBegin(GL_TRIANGLE_STRIP);
+		glVertex3f((double)x, terrain[x][y],(double)y);
+		glVertex3f((double)x, terrain[x][y+1],(double)(y+1));
+		glVertex3f((double)(x+1), terrain[x+1][y],(double)(y));
+		glVertex3f((double)(x+1), terrain[x+1][y+1],(double)(y+1));
+	glEnd();
+*/
+//	glPushAttrib(GL_CURRENT_BIT);
+	glColor3f(1,1,1);
+	glBegin(GL_LINE_STRIP);
+		glVertex3f((double)x*SCALE, terrain[x][y],(double)y*SCALE);
+		glVertex3f((double)x*SCALE, terrain[x][y+1],(double)(y+1)*SCALE);
+		glVertex3f((double)(x+1)*SCALE, terrain[x+1][y+1],(double)(y+1)*SCALE);
+		glVertex3f((double)(x+1)*SCALE, terrain[x+1][y],(double)(y)*SCALE);
+		glVertex3f((double)x*SCALE, terrain[x][y],(double)y*SCALE);
+		glVertex3f((double)(x+1)*SCALE, terrain[x+1][y+1],(double)(y+1)*SCALE);
+	glEnd();
+//	glPopAttrib();
+
+	}
+	}
 }
 
-void kubus(void)
+double offset = 0;
+void genterain()
 {
-	glutSolidCube(1);
-	glPushAttrib(GL_CURRENT_BIT);
-	glColor3f(0,0,0);
-	glLineWidth(3);
-	glutWireCube(1);
-	glPopAttrib();
+	for(int x = 0; x < SIZE; x++)
+	{
+		for(int y = 0; y < SIZE; y++){
+			terrain[x][y] = Perlin_Get2d(offset+(double)x*SCALE,(double)y*SCALE, 0.5, 10);
+		}
+	}
 }
-
+uint64_t base_systick=0;
 void world()
 {
-	double color = sin((double)glutGameSystickGet()/100);
-	if(color<0) color *= -1.0;
-	glColor3f(color,0.0,1.0-color);
-	glutGameRenderAllObjects();
+	if(base_systick != glutGameSystickGet())
+	{
+		offset += 0.05;
+		base_systick = glutGameSystickGet();
+		genterain();
+		if(terrain_id)glDeleteLists(terrain_id,1);
+		terrain_id = glGenLists(1);
+		glNewList(terrain_id, GL_COMPILE);
+		terrain_render();
+		glEndList();
+	}
+	//terrain_render();
+	glCallList(terrain_id);
 }
 
 int main( int argc, char * argv[])
@@ -89,27 +106,20 @@ int main( int argc, char * argv[])
     	myinit();
 
 	glutGameInit();
-
+/*
 	glutGameObjectobject *obj;
-	for(int k = 0; k < 10; k++)
-	{
-	for(int j = 0; j < 10; j++)
-	{
-	for(int i = 0; i < 10; i++)
-	{
-		obj = glutGameObjectsAlloc_object();
-		(*obj).x = i;
-		(*obj).y = j;
-		(*obj).z = -k;
-		(*obj).callback = kubus;
-		(*obj).id = 0;
-	}
-	}
-	}
-	//Pre render the world
-	glutGameRenderCompileList();
+	obj = glutGameObjectsAlloc_object();
+	(*obj).x = i;
+	(*obj).y = j;
+	(*obj).z = -k;
+	(*obj).callback = kubus;
+	(*obj).id = 0;
+*/
+	terrain_id = glGenLists(1);
+	glNewList(terrain_id, GL_COMPILE);
+	terrain_render();
+	glEndList();
 
-	glShadeModel(GL_FLAT);
 	glutGameRenderSceneSet(world);
 	glutGameMainLoop();
 }
