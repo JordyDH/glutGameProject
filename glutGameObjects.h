@@ -16,6 +16,7 @@ typedef struct object {
 	uint16_t id;			//Id of the objects (handy for VBO's)
 	uint16_t state;			//Bit register to store states or oher factors
 	double x, y, z;			//x y z translate of the object
+	double bx, by, bz;		//x y z translate of the object
 	double rot_x, rot_y, rot_z;	//x y z rotation of the object
 	uint8_t physics;		//Physics enable register
 	boundingbox bb;			//bounding box
