@@ -153,7 +153,7 @@ double glutGameRenderGetFPS()
 
 void glutGameRenderAllObjects()
 {
-/*
+
 	glutGameObjectList *objectList;
 	glutGameObjectobject *p;
 
@@ -166,15 +166,15 @@ void glutGameRenderAllObjects()
 		glutGameRenderObject(p);
 	}
 	}
-*/
-	glCallList(world_buffer);
+
+//	glCallList(world_buffer);
 }
 
 void glutGameRenderObject(glutGameObjectobject *object)
 {
 	glPushMatrix();
 	glTranslatef((*object).x,(*object).y,(*object).z);
-	(*(*object).callback)();
+	(*(*object).callback)(object);
 	glPopMatrix();
 }
 

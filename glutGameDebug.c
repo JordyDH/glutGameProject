@@ -107,3 +107,8 @@ void glutGameRenderOnScreenInfo()
 	sprintf(text,"[%s%3.2lf]","FPS: ",glutGameRenderGetFPS());
 	glutBitmapString(GLUT_BITMAP_9_BY_15,text);
 }
+
+void glutGameDebugMenu()
+{
+
+}

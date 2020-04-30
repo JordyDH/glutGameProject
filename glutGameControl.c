@@ -15,6 +15,7 @@
 //////////////////////////////////// [LIB VARS] //////////////////////////////////////////////////////
 static uint64_t GLUTGAME_CONTROL_REG = 0;
 static glutGameObjectplayer *mainplayer;
+
 static double *rotation_lr;
 static double *rotation_ud;
 
@@ -24,6 +25,11 @@ static uint32_t mouse_x_old = 0, mouse_y_old = 0;
 static double *xl, *yl, *zl;
 static double *xPos, *yPos, *zPos;
 static double speed_mul = 0.1;
+
+static uint8_t controlEnable = 0;
+
+void (*keyboard_fnc)(unsigned int) = 0x00;
+
 //////////////////////////////////// [GLUTGAME CONTROL FUNCTIONS] ////////////////////////////////////
 
 void glutGameControlInit(glutGameObjectplayer *player)
@@ -38,6 +44,16 @@ void glutGameControlInit(glutGameObjectplayer *player)
 	glutGameMouseInit();
 	glutGameKeyboardInit();
 	glutTimerFunc(GLUTGAME_CONTROL_TIMER,glutGameControlUpdate,0);
+}
+
+void glutGameControlEnable()
+{
+	controlEnable = 1;
+}
+
+void glutGameControlDisable()
+{
+	controlEnable = 0;
 }
 
 uint64_t glutGameControlGetRegister()
@@ -96,7 +112,6 @@ void glutGameMouseMove(int x, int y)
 	{
 		if((delta_x!=0)||(delta_y!=0))
 		{
-			//TODO Add callback function to bind to buttons
 			glutGameRotateCamera(((double)delta_x/100),((double)delta_y/100));
 		}
 	}
@@ -124,6 +139,11 @@ void glutGameKeyboardInit()
 	#endif
 }
 
+void glutGameKeyboardSetFunc(void (*fnc)(unsigned int))
+{
+	keyboard_fnc = fnc;
+}
+
 /*
 * Function: void glutGameKeyboardPressed()
 * -----------------------------
@@ -139,22 +159,22 @@ void glutGameKeyboardPressed(unsigned  char key, int x, int y)
 	switch(key)
 	{
 		case GLUTGAME_CONTROL_FORW:
-			GLUTGAME_CONTROL_REG = GLUTGAME_CONTROL_REG | (0x01 << 0);
+			if(controlEnable) GLUTGAME_CONTROL_REG = GLUTGAME_CONTROL_REG | (0x01 << 0);
 			break;
 		case GLUTGAME_CONTROL_BACK:
-			GLUTGAME_CONTROL_REG = GLUTGAME_CONTROL_REG | (0x01 << 1);
+			if(controlEnable) GLUTGAME_CONTROL_REG = GLUTGAME_CONTROL_REG | (0x01 << 1);
 			break;
 		case GLUTGAME_CONTROL_LEFT:
-			GLUTGAME_CONTROL_REG = GLUTGAME_CONTROL_REG | (0x01 << 2);
+			if(controlEnable) GLUTGAME_CONTROL_REG = GLUTGAME_CONTROL_REG | (0x01 << 2);
 			break;
 		case GLUTGAME_CONTROL_RIGHT:
-			GLUTGAME_CONTROL_REG = GLUTGAME_CONTROL_REG | (0x01 << 3);
+			if(controlEnable) GLUTGAME_CONTROL_REG = GLUTGAME_CONTROL_REG | (0x01 << 3);
 			break;
 		case GLUTGAME_CONTROL_UP:
-			GLUTGAME_CONTROL_REG = GLUTGAME_CONTROL_REG | (0x01 << 4);
+			if(controlEnable) GLUTGAME_CONTROL_REG = GLUTGAME_CONTROL_REG | (0x01 << 4);
 			break;
 		case GLUTGAME_CONTROL_DOWN:
-			GLUTGAME_CONTROL_REG = GLUTGAME_CONTROL_REG | (0x01 << 5);
+			if(controlEnable) GLUTGAME_CONTROL_REG = GLUTGAME_CONTROL_REG | (0x01 << 5);
 			break;
 		case GLUTGAME_CONTROL_AXIS:
 			GLUTGAME_CONTROL_REG = GLUTGAME_CONTROL_REG ^ (0x01 << 6);	//Toggle function
@@ -163,6 +183,7 @@ void glutGameKeyboardPressed(unsigned  char key, int x, int y)
 	#else
 	glutGameMoveCamera(key);
 	#endif
+	if(keyboard_fnc != 0x00)(*keyboard_fnc)(key);
 }
 
 /*
@@ -179,22 +200,22 @@ void glutGameKeyboardReleased(unsigned char key, int x, int y)
 	switch(key)
 	{
 		case GLUTGAME_CONTROL_FORW:
-			GLUTGAME_CONTROL_REG = GLUTGAME_CONTROL_REG & (~(0x01 << 0));
+			if(controlEnable) GLUTGAME_CONTROL_REG = GLUTGAME_CONTROL_REG & (~(0x01 << 0));
 			break;
 		case GLUTGAME_CONTROL_BACK:
-			GLUTGAME_CONTROL_REG = GLUTGAME_CONTROL_REG & (~(0x01 << 1));
+			if(controlEnable) GLUTGAME_CONTROL_REG = GLUTGAME_CONTROL_REG & (~(0x01 << 1));
 			break;
 		case GLUTGAME_CONTROL_LEFT:
-			GLUTGAME_CONTROL_REG = GLUTGAME_CONTROL_REG & (~(0x01 << 2));
+			if(controlEnable) GLUTGAME_CONTROL_REG = GLUTGAME_CONTROL_REG & (~(0x01 << 2));
 			break;
 		case GLUTGAME_CONTROL_RIGHT:
-			GLUTGAME_CONTROL_REG = GLUTGAME_CONTROL_REG & (~(0x01 << 3));
+			if(controlEnable) GLUTGAME_CONTROL_REG = GLUTGAME_CONTROL_REG & (~(0x01 << 3));
 			break;
 		case GLUTGAME_CONTROL_UP:
-			GLUTGAME_CONTROL_REG = GLUTGAME_CONTROL_REG & (~(0x01 << 4));
+			if(controlEnable) GLUTGAME_CONTROL_REG = GLUTGAME_CONTROL_REG & (~(0x01 << 4));
 			break;
 		case GLUTGAME_CONTROL_DOWN:
-			GLUTGAME_CONTROL_REG = GLUTGAME_CONTROL_REG & (~(0x01 << 5));
+			if(controlEnable) GLUTGAME_CONTROL_REG = GLUTGAME_CONTROL_REG & (~(0x01 << 5));
 			break;
 		case GLUTGAME_CONTROL_AXIS:
 			//GLUTGAME_CONTROL_REG = GLUTGAME_CONTROL_REG & (~(0x01 << 6));

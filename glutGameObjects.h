@@ -6,15 +6,24 @@ typedef struct {
 	double xmax, ymax, zmax;	//Seccond point of the boinding box
 } boundingbox;
 
-#define GLUTGAME_STRUCTID_OBJECT	1
 typedef struct {
-	void (*callback)();		//Linked callback function (ex 3dmodel description)
+	double x,y,z;
+} vector3;
+
+#define GLUTGAME_STRUCTID_OBJECT	1
+typedef struct object {
+	void (*callback)(struct object *self);	//Linked callback function (ex 3dmodel description)
 	uint16_t id;			//Id of the objects (handy for VBO's)
 	uint16_t state;			//Bit register to store states or oher factors
 	double x, y, z;			//x y z translate of the object
 	double rot_x, rot_y, rot_z;	//x y z rotation of the object
+	uint8_t physics;		//Physics enable register
 	boundingbox bb;			//bounding box
-//TODO NEED A NEW NAME QUICKLY ASSHOLE
+	vector3 velocity;		//velocity vector
+	double mass;			//weight model
+	double mem0;
+	double mem1;
+	double mem2;
 } glutGameObjectobject;
 
 #define GLUTGAME_STRUCTID_PLAYER	2

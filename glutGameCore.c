@@ -15,6 +15,7 @@
 //////////////////////////////////// LIB VARS ////////////////////////////////////
 static uint64_t systick = 0;
 static glutGameObjectplayer *mainplayer;
+void (*idle_fnc)() = 0x00;
 
 //////////////////////////////////// GLUTGAME CORE FUNCTIONS ////////////////////////////////////
 
@@ -26,17 +27,24 @@ static glutGameObjectplayer *mainplayer;
 * Timer functions are for scheduling task of the engine.
 * returns nothing
 */
+void render()
+{
+	glutPostRedisplay();
+	glutTimerFunc(GLUTGAME_RENDER_LIMITER,render,0);
+
+}
 void glutGameInit()
 {
 	mainplayer = glutGameObjectsAlloc_player();
 	glutDisplayFunc(glutGameRender);
 	glutReshapeFunc(glutGameRescale);
+	glutTimerFunc(10,render,0);
 	glutTimerFunc(10,glutGameIdle,0);
 	glutTimerFunc(GLUTGAME_SYSTICK_INTERVAL,glutGameSystickService,0);
 
 	mainplayer = glutGameObjectsAlloc_player();
 	glutGameControlInit(mainplayer);
-	glutGameCameraInit(mainplayer,2,0,5);
+	glutGameCameraInit(mainplayer,-46,96,-46);
 	glutGameDebugInit(mainplayer);
 }
 
@@ -57,10 +65,14 @@ void glutGameMainLoop()
 * The internal idle function, is called when there a no events triggerd
 * returns nothing
 */
+void glutGameSetIdleFunc(void (*fnc)())
+{
+	idle_fnc = fnc;
+}
 void glutGameIdle()
 {
-	glutPostRedisplay();
-	glutTimerFunc(17,glutGameIdle,0);
+	if(idle_fnc!=0x00)(*idle_fnc)();
+	glutTimerFunc(0,glutGameIdle,0);
 }
 
 /*

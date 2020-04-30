@@ -1,6 +1,6 @@
 #ifndef __GLUTGAME_CONFIG_H__
 #define __GLUTGAME_CONFIG_H__
-#define GLUTGAME_VERSION "dev.0.2"
+#define GLUTGAME_VERSION "dev.0.3"
 //#define  GLUTGAME_DEBUG_INFO
 //////////////////////////////////// CONTROLS ////////////////////////////////////
 #define GLUTGAME_CONTROL_FORW	'z'	//Moves the camera forwards	--Bit 0 in control reg
@@ -14,12 +14,13 @@
 #define GLUTGAME_CONTROL_TIMER	1
 //////////////////////////////////// PLAYER MODEL ////////////////////////////////////
 #define GLUTGAME_PLAYER_HEIGHT		1.0	//Default player height, possition of the camera
-#define GLUTGAME_PLAYER_BASESPEED	0.05	//Default step size
+#define GLUTGAME_PLAYER_BASESPEED	2.0	//Default step size
 #define GLUTGAME_PLAYER_NEARSIGHT	0.01
 #define GLUTGAME_PLAYER_FARSIGHT	1000
 
 //////////////////////////////////// RENDER SETTINGS ////////////////////////////////////
 #define GLUTGAME_RENDER_FAST			//Renders the scene as fast a possible.
 //#define GLUTGAME_RENDER_DUBBELBUFFER		//Enable dubbel buffering for render.
-#define GLUTGAME_SYSTICK_INTERVAL	100
+#define GLUTGAME_SYSTICK_INTERVAL	1
+#define GLUTGAME_RENDER_LIMITER		17
 #endif
