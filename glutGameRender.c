@@ -172,8 +172,25 @@ void glutGameRenderAllObjects()
 
 void glutGameRenderObject(glutGameObjectobject *object)
 {
+	uint64_t depth = 0;
 	glPushMatrix();
-	glTranslatef((*object).x,(*object).y,(*object).z);
+	glutGameObjectobject *reff;
+	//Depth scan of the linked object list
+	for(reff = (*object).linkedobj; reff != 0x00; reff = (*reff).linkedobj) depth++;
+	//Go from the bottom of the list to the top
+	for(int64_t i = depth; i >= 0; i--)
+	{
+		reff = object;
+		//Start from the bottom and move up
+		for(uint64_t j = 0; j < (i); j++) reff = (*reff).linkedobj;
+		//Translate axis to the reff object
+		glTranslatef((*reff).x,(*reff).y,(*reff).z);
+		//Rotate axis to the reff object
+		if((*reff).rot_x != 0) glRotatef((*reff).rot_x,1,0,0);
+		if((*reff).rot_y != 0) glRotatef((*reff).rot_y,0,1,0);
+		if((*reff).rot_z != 0) glRotatef((*reff).rot_z,0,0,1);
+	}
+	//Callback for drawing the object
 	(*(*object).callback)(object);
 	glPopMatrix();
 }

@@ -12,19 +12,18 @@ typedef struct {
 
 #define GLUTGAME_STRUCTID_OBJECT	1
 typedef struct object {
+	struct object *linkedobj;		//Linked Object: move to default 0,0,0 point to the values of the linked object
 	void (*callback)(struct object *self);	//Linked callback function (ex 3dmodel description)
-	uint16_t id;			//Id of the objects (handy for VBO's)
-	uint16_t state;			//Bit register to store states or oher factors
-	double x, y, z;			//x y z translate of the object
-	double bx, by, bz;		//x y z translate of the object
-	double rot_x, rot_y, rot_z;	//x y z rotation of the object
-	uint8_t physics;		//Physics enable register
-	boundingbox bb;			//bounding box
-	vector3 velocity;		//velocity vector
-	double mass;			//weight model
-	double mem0;
-	double mem1;
-	double mem2;
+	uint16_t id;				//Id of the objects (handy for VBO's)
+	uint16_t state;				//Bit register to store states or oher factors
+	double x, y, z;				//x y z translate of the object
+	double rot_x, rot_y, rot_z;		//x y z rotation of the object
+	uint8_t physics;			//Physics enable register
+	boundingbox bb;				//bounding box
+	vector3 velocity;			//velocity vector
+	double mass;				//mass value of the object
+	double lf_mem[3];
+	uint32_t i_mem[3];
 } glutGameObjectobject;
 
 #define GLUTGAME_STRUCTID_PLAYER	2

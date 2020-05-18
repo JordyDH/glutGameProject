@@ -14,7 +14,7 @@
 #define GLUTGAME_CONTROL_TIMER	1
 //////////////////////////////////// PLAYER MODEL ////////////////////////////////////
 #define GLUTGAME_PLAYER_HEIGHT		1.0	//Default player height, possition of the camera
-#define GLUTGAME_PLAYER_BASESPEED	2.0	//Default step size
+#define GLUTGAME_PLAYER_BASESPEED	0.5	//Default step size
 #define GLUTGAME_PLAYER_NEARSIGHT	0.01
 #define GLUTGAME_PLAYER_FARSIGHT	1000
 

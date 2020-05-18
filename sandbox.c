@@ -51,15 +51,14 @@ void keyboard(unsigned int key)
 	if( key == 'p')
 	{
 		glutGameObjectobject *obj = glutGameObjectsAlloc_object();
-		(*obj).x = 50;
-		(*obj).state = 8;
+		(*obj).x = 10;
+		(*obj).state = 1.0;
 		(*obj).callback = cube;
 		(*obj).physics = 1;
 		(*obj).velocity.x = 0.00;
 		(*obj).velocity.y = 0.00;
-		(*obj).velocity.z = 0.20;
-		(*obj).mass = 1.0;
-		glutGameObjectsAddList(obj,0);
+		(*obj).velocity.z = 1.0;
+		(*obj).mass = 100.0;
 	}
 	if( key == '+')
 	{
@@ -285,16 +284,20 @@ int main( int argc, char * argv[])
 	(*obj).velocity.x = 0.00;
 	(*obj).velocity.y = 0.00;
 	(*obj).velocity.z = 0.0;
-	(*obj).mass = 10000000;
+	(*obj).mass = 1000;
 //	glutGameObjectsAddList(obj,0);
 
 	obj = glutGameObjectsAlloc_object();
 	(*obj).callback = cube;
 	(*obj).state = 1.0;
 	(*obj).physics = 1;
-	(*obj).mem0 = 0.0;
-	(*obj).mem1 = 4.06;
-	(*obj).mem2 = 8.06;
+	(*obj).velocity.x = 0.00;
+	(*obj).velocity.y = 0.00;
+	(*obj).velocity.z = 1.0;
+	(*obj).mass = 1000;
+	(*obj).z = 10;
+	(*obj).x = 10;
+	reff_obj = obj;
 /*
 
 	obj = glutGameObjectsAlloc_object();
@@ -309,7 +312,7 @@ int main( int argc, char * argv[])
 	reff_obj = obj;
 */
 
-	glutGameSetIdleFunc(pseudo_physics);
+	glutGameSetIdleFunc(physics);
 	glutGameMainLoop();
 
 }

@@ -9,7 +9,7 @@ all All: $(TARGETS)
 INCPATH = -I/usr/local/include
 LIBPATH = -L. -L/lib/x86_64-linux-gnu
 LIBS = -lglut -lGLU -lGL -lGLw -lXt -lXext -lX11 -ljpeg -lm 
-DEBUGFLAGS = -O3 -g
+DEBUGFLAGS = -Ofast -g
 CFLAGS = -DD32 $(DEBUGFLAGS) $(INCPATH) 
 SRCS = \
 	sandbox.c glutGameCore.c glutGameObjects.c glutGameCamera.c glutGameControl.c glutGameRender.c glutGameDebug.c InitJPG.c
